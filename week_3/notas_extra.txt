@@ -1,0 +1,20 @@
+# 1. crear la imagen docker de pyspark
+docker build -t mcs_unsa_pyspark_demo .
+
+# 2. crear contenedor de pyspark
+docker run -dti -v $PWD:/home/jovyan/SparkProjects/Project1/ --name pyspark_demo mcs_unsa_pyspark_demo:latest bash
+
+# entrar a contenedor de pyspark
+docker exec -ti pyspark_demo bash
+
+# 3. ejecutar Makefile (el paso llamado "build")
+make build
+
+# 4. entrar a la carpeta (target) donde se genero el zip y el .py principal
+cd target
+
+# 5. ejecutar spark-submit
+spark-submit --master local[*] --deploy-mode client --py-files spark.zip run_demo.py --root_path /home/jovyan/SparkProjects/Project1/source_data
+
+# 6. si fallara la ejecucion y se necesitara volver a ejecutar
+--> volver una carpeta hacia atras (cd ..) & modificar codigo pyspark & repetir los pasos 3,4,5
